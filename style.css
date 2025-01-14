@@ -16,7 +16,6 @@ body {
 
 .panel {
   overflow: auto;
-  padding: 10px 5px 10px 10px;
 }
 
 .panel.left { 
@@ -72,6 +71,7 @@ body {
 .files {
   margin-top: 30px;
   width: 100%;
+  padding: 0 8px;
 }
 
 .files .directory, .files .file {
@@ -124,7 +124,7 @@ body {
 }
 
 .panel.left .form {
-  padding: 10px 16px 0 0;
+  padding: 10px 16px 0 10px;
   position: absolute;
   bottom: 10px;
   display: flex;
