@@ -23,10 +23,11 @@
       <div class="files">
         <div class="info">Please Load the Github Repo URL!</div>
       </div>
-      <form class="form">
-        <input type="text" id="github-repo-url" placeholder="Enter Github Repo URL" />
-        <button type="submit">Load</button>
-      </form>
+      <div class="form">
+        <input id="github-repo-url" type="text" placeholder="Enter Github Repo URL" />
+        <button id="load-url-btn" onclick="loadGithubFiles()">Load</button>
+        <button id="clear-btn" class="clear" onclick="reset()">Clear</button>
+      </div>
     </div>
     <div class="resizer"></div>
     <div class="panel right">

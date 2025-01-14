@@ -15,7 +15,8 @@ body {
 }
 
 .panel {
-  overflow: auto;
+  overflow: hidden;
+  padding-top: 10px;
 }
 
 .panel.left { 
@@ -25,6 +26,7 @@ body {
 }
 
 .panel.right { 
+  overflow: auto;
   background-color: #ffffff;
   flex-grow: 1;
 }
@@ -72,6 +74,8 @@ body {
   margin-top: 30px;
   width: 100%;
   padding: 0 8px;
+  overflow: auto;
+  height: calc(100vh - 100px);
 }
 
 .files .directory, .files .file {
@@ -124,17 +128,18 @@ body {
 }
 
 .panel.left .form {
-  padding: 10px 16px 0 10px;
+  padding: 6px 16px 10px 10px;
   position: absolute;
-  bottom: 10px;
+  bottom: 0;
   display: flex;
   width: 250px;
   gap: 10px;
   width: 100%;
   user-select: none;
+  background-color: #f4f4f4;
 }
 
-.panel.left .form input{
+.panel.left .form input {
   flex: 1;
   padding: 4px 8px;
   outline: none;
@@ -143,10 +148,25 @@ body {
   border-radius: 4px;
 }
 
-.panel.left .form button{
+.panel.left .form button {
   padding: 4px 8px;
   background-color: #000;
   color: #fff;
   border: none;
   border-radius: 4px;
+  cursor: pointer;
+}
+
+.panel.left .form button:active {
+  opacity: 0.8;
+}
+
+.panel.left .form button.clear {
+  background-color: #fff;
+  color: #000;
+  border: 1px solid #000;
+}
+
+#file-content {
+  padding: 10px;
 }

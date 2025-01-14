@@ -1,6 +1,6 @@
 let all_files = [];
 
-let github_repo_url = null;
+let github_repo_url = window.localStorage.getItem("github_url") || null;
 
 const resizer = document.querySelector(".resizer");
 const leftPanel = document.querySelector(".left");
@@ -8,8 +8,18 @@ const rightPanel = document.querySelector(".right");
 const container = document.querySelector(".container");
 const filesComponent = document.querySelector(".files");
 const form = document.querySelector(".form");
+const formInput = document.querySelector("#github-repo-url");
+const fileContent = document.getElementById("file-content");
 
 let isResizing = false;
+
+window.addEventListener("load", () => {
+  if (github_repo_url) {
+    formInput.value = github_repo_url;
+    formInput.setAttribute("value", github_repo_url);
+    loadGithubFiles(github_repo_url);
+  }
+});
 
 resizer.addEventListener("mousedown", () => {
   isResizing = true;
@@ -39,23 +49,31 @@ document.addEventListener("mouseup", () => {
   resizer.classList.remove("active");
 });
 
-const loadGithubFiles = async (e) => {
-  e.preventDefault();
+const loadGithubFiles = async (url) => {
+  filesComponent.innerHTML = `<div class="loader"></div>`;
 
-  const inputField = document.getElementById("github-repo-url");
-  const user_input = inputField.value.trim();
+  if (!url) {
+    const user_input = formInput.value.trim();
+    const username = user_input.split("/").at(-2);
+    const repository_name = user_input.split("/").at(-1);
 
-  const username = user_input.split("/").at(-2);
-  const repository_name = user_input.split("/").at(-1);
+    const isValidGitHubUrl = () => /^https:\/\/github\.com\//.test(user_input);
 
-  const isValidGitHubUrl = () => /^https:\/\/github\.com\//.test(user_input);
+    if (!isValidGitHubUrl()) {
+      filesComponent.innerHTML = `<p class="error">Please enter a valid GitHub repository URL!</p>`;
+      return;
+    }
 
-  if (!isValidGitHubUrl()) {
-    filesComponent.innerHTML = `<p class="error">Please enter a valid GitHub repository URL!</p>`;
-    return;
+    window.localStorage.setItem("github_url", user_input);
+
+    github_repo_url = `https://api.github.com/repos/${username}/${repository_name}`;
+  } else {
+    console.log(url);
+    const username = url.split("/").at(-2);
+    const repository_name = url.split("/").at(-1);
+    window.localStorage.setItem("github_url", url);
+    github_repo_url = `https://api.github.com/repos/${username}/${repository_name}`;
   }
-
-  github_repo_url = `https://api.github.com/repos/${username}/${repository_name}`;
 
   try {
     const response = await fetchAllFiles();
@@ -70,14 +88,11 @@ const loadGithubFiles = async (e) => {
   }
 };
 
-form.addEventListener("submit", loadGithubFiles);
-
 const fetchAllFiles = (path = "") => {
   const url = `${github_repo_url}/contents/${path}`;
   return fetch(url)
     .then((res) => res.json())
     .then((data) => {
-      console.log(data?.message);
       if (data?.message?.includes("rate limit")) {
         filesComponent.innerHTML = `<p class="error">API rate limit exceeded. Try again later.</p>`;
         return null;
@@ -91,7 +106,6 @@ const fetchAllFiles = (path = "") => {
 };
 
 async function fetchFileContent(url) {
-  const fileContent = document.getElementById("file-content");
   fileContent.nextElementSibling.innerHTML = "";
   fileContent.innerHTML = `<div class="loader"></div>`;
   try {
@@ -155,8 +169,6 @@ const renderFiles = (files = [], path = "") => {
 const generateFileHTML = (files, path) => {
   let html = "";
 
-  console.log(files);
-
   if (files?.length === 0) return;
 
   files.sort((a, b) => {
@@ -194,3 +206,15 @@ const getFileHTML = (file, path) => {
   }
 };
 
+const reset = () => {
+  const filesComponent = document.querySelector(".files");
+  const fileContent = document.getElementById("file-content");
+
+  all_files = [];
+  github_repo_url = null;
+  formInput.value = "";
+  filesComponent.innerHTML = `<div class="info">Please Load the Github Repo URL!</div>`;
+  fileContent.textContent = "";
+  fileContent.nextElementSibling.innerHTML = `<div class="info">Please select a file to view content</div>`;
+  window.localStorage.removeItem("github_url");
+};
