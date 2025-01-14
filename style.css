@@ -1,0 +1,152 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body {
+  font-family: "Ubuntu", sans-serif;
+  font-size: 16px;
+}
+
+.container {
+  display: flex;
+  width: 100%;
+  height: 100vh;
+}
+
+.panel {
+  overflow: auto;
+  padding: 10px 5px 10px 10px;
+}
+
+.panel.left { 
+  background-color: #f4f4f4;
+  min-width: 300px;
+  position: relative;
+}
+
+.panel.right { 
+  background-color: #ffffff;
+  flex-grow: 1;
+}
+
+.resizer {
+  width: 5px;
+  background-color: #ccc;
+  cursor: ew-resize;
+  position: relative;
+  z-index: 1;
+}
+
+.resizer.active {
+  background-color: #888;
+}
+
+.loader {
+  border: 4px solid #ccc;
+  border-radius: 50%;
+  border-top: 4px solid #000;
+  width: 30px;
+  height: 30px;
+  -webkit-animation: spin 1s linear infinite;
+  animation: spin 1s linear infinite;
+  margin: auto;
+}
+
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.left-heading {
+  text-align: center;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.files {
+  margin-top: 30px;
+  width: 100%;
+}
+
+.files .directory, .files .file {
+  border-radius: 4px;
+  transition: 0.1s;
+}
+
+.files .directory div, .files .file div {
+  height: 20px;
+  display: flex;
+  column-gap: 10px;
+  cursor: pointer;
+  align-items: center;
+  padding: 16px 8px;
+  user-select: none;
+}
+
+
+.files .directory div p, .files .file div p {
+  white-space: nowrap;
+}
+
+.files .directory div i, .files .file div i {
+  width: 16px;
+  min-width: 16px;
+}
+
+.blank-icon {
+  width: 16px;
+  min-width: 16px;
+}
+
+.files .directory:hover, .files .file:hover {
+  background-color: #c9c9c9;
+}
+
+.error {
+  text-align: center;
+  color: red;
+}
+
+.ms-16px {
+  margin-left: 16px;
+}
+
+.info {
+  text-align: center;
+  color: #888;
+  margin-top: 10px;
+}
+
+.panel.left .form {
+  padding: 10px 16px 0 0;
+  position: absolute;
+  bottom: 10px;
+  display: flex;
+  width: 250px;
+  gap: 10px;
+  width: 100%;
+  user-select: none;
+}
+
+.panel.left .form input{
+  flex: 1;
+  padding: 4px 8px;
+  outline: none;
+  background-color: #fff;
+  border: 1px solid #888;
+  border-radius: 4px;
+}
+
+.panel.left .form button{
+  padding: 4px 8px;
+  background-color: #000;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+}
